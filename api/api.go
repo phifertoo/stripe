@@ -1,17 +1,17 @@
-package auth
+package api
 
 import (
 	"fmt"
 	"log"
 
-	stripe "github.com/stripe/stripe-go/v76"
+	stripe_sdk "github.com/stripe/stripe-go/v76"
 	customer "github.com/stripe/stripe-go/v76/customer"
 )
 
-func GetStripe() {
-	params := &stripe.CustomerParams{
-		Email: stripe.String("customer@example.com"),
-		Name:  stripe.String("Customer Name"),
+func CreateCustomer(email string, customerName string) {
+	params := &stripe_sdk.CustomerParams{
+		Email: stripe_sdk.String(email),
+		Name:  stripe_sdk.String(customerName),
 	}
 	c, err := customer.New(params)
 	if err != nil {
@@ -19,19 +19,11 @@ func GetStripe() {
 	}
 
 	fmt.Printf("Customer created: %v\n", c.ID)
-	// url := "https://api.stripe.com" // Replace with your desired API endpoint
-	// resp, err := http.Get(url)
-	// if err != nil {
-	// 	fmt.Printf("Error making request: %s\n", err)
-	// 	return
-	// }
-	// defer resp.Body.Close()
+}
 
-	// body, err := io.ReadAll(resp.Body)
-	// if err != nil {
-	// 	fmt.Printf("Error reading body: %s\n", err)
-	// 	return
-	// }
+func ViewAllCustomers() {
+	params := &stripe_sdk.CustomerListParams{}
+	customers := customer.List(params)
 
-	// fmt.Printf("Response Body: %s\n", string(body))
+	fmt.Printf("customers %v\n", customers.List())
 }
